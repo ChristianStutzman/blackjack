@@ -1,0 +1,16 @@
+body {
+  background-color: #206523;
+  overflow: auto;
+  height: auto;
+  width: auto;
+}
+
+#main-header {
+  color: black;
+  text-align: center;
+}
+
+h1 {
+  font-size: 50px;
+  text-decoration: underline;
+}
