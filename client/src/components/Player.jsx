@@ -22,7 +22,12 @@ class Player extends Component {
             })}
           </Row>
           <Row className="player-btn-row">
-            <Button variant='success' onClick={this.props.drawCard}>HIT</Button>
+            <Col>
+              <Button variant='success' onClick={() => this.props.drawCard('player')}>HIT</Button>
+            </Col>
+            <Col>
+              <Button variant='success' onClick={() => this.props.drawCard('dealer')}>STAND</Button>
+            </Col>
           </Row>
         </React.Fragment>
       )

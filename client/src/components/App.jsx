@@ -15,7 +15,8 @@ class App extends Component {
       playerDraw: null,
       dealerDraw: null,
       dealerScore: 0,
-      playerScore: 0
+      playerScore: 0,
+      initialDealerCardImage: null
     }
 
     this.updateScore = this.updateScore.bind(this);
@@ -65,63 +66,84 @@ class App extends Component {
     tempState[`${player}Score`] = score + aceStack;
   }
 
-  async drawCard(event) {
-    event.preventDefault();
-
-    // Draw player card
-    let draw = await axios.get(`https://deckofcardsapi.com/api/deck/${this.state.deckId}/draw/?count=1`);
-    let card = draw.data.cards[0];
-    let hand = this.state.playerDraw;
-    hand.push(card);
-    this.setState({
-      playerDraw: hand
-    })
-    this.updateScore(this.state.playerDraw, 'player');
-
-    // Check if player score has reached or exceeded maximum
-    if (this.state.playerScore > 21) {
-      this.triggerGameOver();
-    } else if (this.state.playerScore === 21) {
-      this.triggerResults();
-    }
-
-    // Draw dealer card if applicable
-    if (this.state.dealerScore < 17) {
-      let dealerDraw = await axios.get(`https://deckofcardsapi.com/api/deck/${this.state.deckId}/draw/?count=1`);
-      let dealerCard = dealerDraw.data.cards[0];
-      let dealerHand = this.state.dealerDraw;
-      dealerHand.push(dealerCard);
+  async drawCard(player) {
+    if (player === 'player') {
+      // Draw player card
+      let draw = await axios.get(`https://deckofcardsapi.com/api/deck/${this.state.deckId}/draw/?count=1`);
+      let card = draw.data.cards[0];
+      let hand = this.state.playerDraw;
+      hand.push(card);
       this.setState({
-        dealerDraw: dealerHand
+        playerDraw: hand
       })
-      this.updateScore(this.state.dealerDraw, 'dealer');
+      this.updateScore(this.state.playerDraw, 'player');
 
-      // Check if dealer score has reached or exceeded maximum
-      if (this.state.dealerScore > 21) {
-        this.triggerGameOver();
-      } else if (this.state.dealerScore === 21) {
-        this.triggerResults();
+      setTimeout(() => {
+        // Check if player score has reached or exceeded maximum
+        if (this.state.playerScore > 21) {
+          this.triggerGameOver();
+        } else if (this.state.playerScore === 21) {
+          this.triggerResults();
+        }
+      }, 1000)
+
+    } else if (player === 'dealer') {
+      // Show initial dealer draw
+      let currentDealerHand = this.state.dealerDraw;
+      currentDealerHand[0].image = this.state.initialDealerCardImage;
+      this.setState({
+        dealerDraw: currentDealerHand
+      })
+
+      // Draw dealer card if applicable
+      if (this.state.dealerScore < 17) {
+        let dealerDraw = await axios.get(`https://deckofcardsapi.com/api/deck/${this.state.deckId}/draw/?count=1`);
+        let dealerCard = dealerDraw.data.cards[0];
+        let dealerHand = this.state.dealerDraw;
+        dealerHand.push(dealerCard);
+        this.setState({
+          dealerDraw: dealerHand
+        })
+        this.updateScore(this.state.dealerDraw, 'dealer');
+
+        setTimeout(() => {
+          if (this.state.dealerScore < 17) {
+            this.drawCard('dealer');
+          } else {
+            this.triggerResults();
+          }
+        }, 500);
+      } else {
+        setTimeout(this.triggerResults, 500);
       }
     }
   }
 
   triggerGameOver() {
-    console.log('GAME OVER')
+    alert('YOU LOST! GAME OVER');
   }
 
   triggerResults() {
-    console.log('results')
+    if (this.state.playerScore > this.state.dealerScore || this.state.dealerScore > 21) {
+      alert('YOU WON!')
+    } else {
+      this.triggerGameOver();
+    }
   }
+
 
   async componentDidMount () {
     const deck = await axios.get('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1')
     const initialDeckDraw = await axios.get(`https://deckofcardsapi.com/api/deck/${deck.data.deck_id}/draw/?count=4`);
     let playerDraw = initialDeckDraw.data.cards.slice(0, 2);
     let dealerDraw = initialDeckDraw.data.cards.slice(2);
+    let dealerCardImage = dealerDraw[0].image;
+    dealerDraw[0].image = 'https://media.istockphoto.com/photos/bicycle-rider-back-playing-card-design-picture-id157772536?k=6&m=157772536&s=170667a&w=0&h=kk9dkMmkrTrkC2kCrXeGIh9PbcoKyJTikLILsakcsbE=';
     this.setState({
       deckId: deck.data.deck_id,
       playerDraw: playerDraw,
-      dealerDraw: dealerDraw
+      dealerDraw: dealerDraw,
+      initialDealerCardImage: dealerCardImage
     })
     this.updateScore(playerDraw, 'player');
     this.updateScore(dealerDraw, 'dealer');
@@ -137,7 +159,11 @@ class App extends Component {
           <Dealer draw={this.state.dealerDraw} drawCard={this.drawCard}/>
         </Row>
         <Row id="main-player-row">
-          <Player draw={this.state.playerDraw} drawCard={this.drawCard}/>
+          <Player
+            draw={this.state.playerDraw}
+            drawCard={this.drawCard}
+
+          />
         </Row>
       </Container>
     )
