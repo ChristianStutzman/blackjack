@@ -4,7 +4,6 @@ import { Row, Col, Image, Button } from 'react-bootstrap';
 class Player extends Component {
   constructor(props) {
     super(props);
-    this.props = props;
   }
 
   render() {
@@ -12,7 +11,7 @@ class Player extends Component {
     if (this.props.draw) {
       return (
         <React.Fragment>
-          <Row className="card-draw-row">
+          <Row align="center" className="card-draw-row">
             {this.props.draw.map(card => {
               return (
                 <Col key={card.image} className="card-draw-col">
@@ -21,13 +20,16 @@ class Player extends Component {
               )
             })}
           </Row>
-          <Row className="player-btn-row">
+          {/* <Row className="player-btn-row">
             <Col>
               <Button variant='success' onClick={() => this.props.drawCard('player')}>HIT</Button>
             </Col>
             <Col>
               <Button variant='success' onClick={() => this.props.drawCard('dealer')}>STAND</Button>
             </Col>
+          </Row> */}
+          <Row align="right">
+            <span id="player-score">Your score: {this.props.score}</span>
           </Row>
         </React.Fragment>
       )

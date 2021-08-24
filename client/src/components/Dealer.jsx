@@ -11,7 +11,7 @@ class Dealer extends Component {
     console.log(this.props)
     if (this.props.draw) {
       return (
-        <Row className="card-draw-row">
+        <Row align="center" className="card-draw-row">
           {this.props.draw.map(card => {
             return (
               <Col key={card.image} className="card-draw-col">

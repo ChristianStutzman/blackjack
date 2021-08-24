@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Button } from 'react-bootstrap';
 import axios from 'axios';
 import Dealer from './Dealer.jsx';
 import Player from './Player.jsx';
@@ -64,6 +64,7 @@ class App extends Component {
     }
     let tempState = this.state;
     tempState[`${player}Score`] = score + aceStack;
+    this.setState(tempState);
   }
 
   async drawCard(player) {
@@ -150,23 +151,35 @@ class App extends Component {
   }
 
   render() {
-    return (
-      <Container>
-        <Row id="main-header">
-          <h1>BlackJack</h1>
-        </Row>
-        <Row id="main-dealer-row">
-          <Dealer draw={this.state.dealerDraw} drawCard={this.drawCard}/>
-        </Row>
-        <Row id="main-player-row">
-          <Player
-            draw={this.state.playerDraw}
-            drawCard={this.drawCard}
-
-          />
-        </Row>
-      </Container>
-    )
+    if (this.state.playerScore && this.state.dealerScore) {
+      return (
+        <Container>
+          <Row id="main-header">
+            <h1>BlackJack</h1>
+          </Row>
+          <Row id="main-dealer-row">
+            <Dealer draw={this.state.dealerDraw} drawCard={this.drawCard}/>
+          </Row>
+          <Row className="player-btn-row">
+            <Col align="left">
+              <Button variant='success' onClick={() => this.drawCard('player')}>HIT</Button>
+            </Col>
+            <Col align="right">
+              <Button variant='success' onClick={() => this.drawCard('dealer')}>STAND</Button>
+            </Col>
+          </Row>
+          <Row id="main-player-row">
+            <Player
+              draw={this.state.playerDraw}
+              drawCard={this.drawCard}
+              score={this.state.playerScore}
+            />
+          </Row>
+        </Container>
+      )
+    } else {
+      return <span>Loading...</span>
+    }
   }
 }
 

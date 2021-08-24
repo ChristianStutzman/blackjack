@@ -5,6 +5,10 @@ body {
   width: auto;
 }
 
+#app {
+  max-height: 100vh;
+}
+
 #main-header {
   color: black;
   text-align: center;
@@ -14,3 +18,75 @@ h1 {
   font-size: 50px;
   text-decoration: underline;
 }
+
+.container {
+  max-height: 100vh;
+}
+
+.card-image {
+  height: 17rem;
+  width: 13rem;
+}
+
+.player-btn-row {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+button {
+  width: 8rem;
+  height: 3rem;
+}
+
+#player-score {
+  color: white;
+  font-size: 30px;
+  font-weight: bold;
+  letter-spacing: 3px;
+  padding-top: 20px;
+}
+
+/* .card-draw-row {
+  justify-content: center;
+  position: relative;
+  margin-left: 3rem;
+}
+
+.card-draw-row:nth-child(1) {
+  position: absolute;
+  margin-right: 10rem;
+  z-index: -1;
+}
+
+.card-draw-row:nth-child(2) {
+  position: absolute;
+  margin-right: 0rem;
+  z-index: 0;
+}
+
+.card-draw-row:nth-child(3) {
+  position: absolute;
+  margin-right: -10rem;
+  z-index: 1;
+}
+
+.card-draw-row:nth-child(4) {
+  position: absolute;
+  margin-right: -20rem;
+  z-index: 2;
+}
+
+.card-draw-row:nth-child(5) {
+  position: absolute;
+  margin-right: -30rem;
+  z-index: 3;
+} */
+
+/* #main-dealer-row {
+  max-height: 40vh;
+}
+
+#main-player-row {
+  max-height: 40vh;
+  margin-top: 45vh;
+} */
