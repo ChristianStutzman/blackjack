@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Image } from 'react-bootstrap';
+import { Row, Col, Image, Button } from 'react-bootstrap';
 
 class Player extends Component {
   constructor(props) {
@@ -11,15 +11,20 @@ class Player extends Component {
     console.log(this.props);
     if (this.props.draw) {
       return (
-        <Row className="card-draw-row">
-          {this.props.draw.map(card => {
-            return (
-              <Col className="card-draw-col">
-                <Image className="card-image" src={card.image} />
-              </Col>
-            )
-          })}
-        </Row>
+        <React.Fragment>
+          <Row className="card-draw-row">
+            {this.props.draw.map(card => {
+              return (
+                <Col key={card.image} className="card-draw-col">
+                  <Image className="card-image" src={card.image} />
+                </Col>
+              )
+            })}
+          </Row>
+          <Row className="player-btn-row">
+            <Button variant='success' onClick={this.props.drawCard}>HIT</Button>
+          </Row>
+        </React.Fragment>
       )
     } else {
       return <span>Loading...</span>

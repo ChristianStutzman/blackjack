@@ -14,7 +14,7 @@ class Dealer extends Component {
         <Row className="card-draw-row">
           {this.props.draw.map(card => {
             return (
-              <Col className="card-draw-col">
+              <Col key={card.image} className="card-draw-col">
                 <Image className="card-image" src={card.image} />
               </Col>
             )
