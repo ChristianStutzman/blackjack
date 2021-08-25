@@ -10,6 +10,8 @@ import Loser from './Loser.jsx';
 import Ante from './Ante.jsx';
 import Draw from './Draw.jsx';
 import GameOver from './GameOver.jsx';
+import HighScore from './HighScore.jsx';
+import SetHighScore from './SetHighScore.jsx';
 
 
 
@@ -30,7 +32,9 @@ class App extends Component {
       playerChips: 500,
       totalPot: 0,
       gameOver: false,
-      highScore: 500
+      highScore: 500,
+      viewHighScores: false,
+      setHighScore: false
     }
 
     this.updateScore = this.updateScore.bind(this);
@@ -40,7 +44,9 @@ class App extends Component {
     this.submitBet = this.submitBet.bind(this);
     this.playAgain = this.playAgain.bind(this);
     this.getInitialDraw = this.getInitialDraw.bind(this);
+    this.submitScore = this.submitScore.bind(this);
     this.handleGameOver = this.handleGameOver.bind(this);
+    this.showHighScores = this.showHighScores.bind(this);
   }
 
   updateScore = (cards, player) => {
@@ -60,17 +66,14 @@ class App extends Component {
       } else {
         aceStack++
       }
-      console.log(cardValue)
       if (cardValue) {
         score += cardValue;
       }
     })
-    console.log('acestack', aceStack)
     if (aceStack > 0) {
-      if (aceStack + this.state[`${player}Score`] < 11) {
+      if (aceStack + this.state[`${player}Score`] <= 11) {
         aceStack += 10;
       }
-      console.log('increased ace', aceStack);
     }
     let tempState = this.state;
     tempState[`${player}Score`] = score + aceStack;
@@ -203,6 +206,21 @@ class App extends Component {
     });
   }
 
+  submitScore(event) {
+    event.preventDefault();
+    this.setState({
+      gameOver:false,
+      setHighScore: true
+    })
+  }
+
+  showHighScores() {
+    this.setState({
+      setHighScore: false,
+      viewHighScores: true
+    })
+  }
+
   async getInitialDraw() {
     const deck = await axios.get('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1')
     const initialDeckDraw = await axios.get(`https://deckofcardsapi.com/api/deck/${deck.data.deck_id}/draw/?count=4`);
@@ -265,7 +283,19 @@ class App extends Component {
               chips={this.state.playerChips}
               playAgain={this.playAgain}
               highScore={this.state.highScore}
+              submitScore={this.submitScore}
             />
+          )
+        } else if (this.state.setHighScore) {
+          return (
+            <SetHighScore
+              showHighScores={this.showHighScores}
+              score={this.state.highScore}
+            />
+          )
+        } else if (this.state.viewHighScores) {
+          return (
+            <HighScore playAgain={this.playAgain} />
           )
         } else {
           return (

@@ -112,6 +112,18 @@ button {
   letter-spacing: 3px;
 }
 
+#submit-score {
+  width: 20rem;
+}
+
+#game-over-btn-row {
+  margin-top: 15px;
+}
+
+.high-score-info {
+  font-size: 25px;
+}
+
 /* .card-draw-row {
   justify-content: center;
   position: relative;

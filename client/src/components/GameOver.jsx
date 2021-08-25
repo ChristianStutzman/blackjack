@@ -13,11 +13,18 @@ const GameOver = (props) => {
           <span className="outcome-total">Dealer Total: {props.dealerScore}</span>
           <br/>
           <span className="outcome-total">Highest Chip Total: {props.highScore}</span>
-          <div className="play-again">
-            <Button onClick={props.playAgain} variant="outline-dark">
-              Play Again
-            </Button>
-          </div>
+          <Row id="game-over-btn-row">
+            <Col>
+              <Button id="submit-score" onClick={props.submitScore} variant="outline-dark">
+                Submit Score To Leaderboard
+              </Button>
+            </Col>
+            <Col>
+              <Button onClick={props.playAgain} variant="outline-dark">
+                Play Again
+              </Button>
+            </Col>
+          </Row>
         </Alert>
       </Col>
     </Row>
