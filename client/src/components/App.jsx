@@ -183,7 +183,8 @@ class App extends Component {
         })
       }, 750);
     } else if (this.state.playerScore === this.state.dealerScore) {
-      let newChipTotal = (this.state.totalPot / 2) + this.state.playerChips;
+      let newPot = this.state.totalPot / 2
+      let newChipTotal = newPot + this.state.playerChips;
       setTimeout(() => {
         this.setState({
           playerChips: newChipTotal,
