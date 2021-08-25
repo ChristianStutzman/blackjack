@@ -7,7 +7,6 @@ class Player extends Component {
   }
 
   render() {
-    console.log(this.props);
     if (this.props.draw) {
       return (
         <React.Fragment>

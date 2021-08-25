@@ -11,7 +11,6 @@ class SetHighScore extends Component {
       score: props.score,
       date: moment().format('MMMM Do YYYY, h:mm:ss a')
     }
-    console.log(props)
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -21,7 +20,7 @@ class SetHighScore extends Component {
   async handleSubmit(event) {
     event.preventDefault();
     if (this.state.name.length) {
-      await axios.post('http://3.19.75.226:3000/highScores', this.state)
+      await axios.post(`http://${this.props.ip}3000/highScores`, this.state)
       this.props.showHighScores();
     } else {
       alert('You must enter a name to submit a score!')

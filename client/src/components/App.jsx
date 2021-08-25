@@ -13,6 +13,7 @@ import GameOver from './GameOver.jsx';
 import HighScore from './HighScore.jsx';
 import SetHighScore from './SetHighScore.jsx';
 
+const ip = '3.19.75.226';
 
 
 class App extends Component {
@@ -72,8 +73,6 @@ class App extends Component {
         score += cardValue;
       }
     })
-    console.log('aceStack', aceStack);
-    console.log('score', this.state[`${player}Score`])
     if (aceStack > 0) {
       if (aceStack + score <= 11) {
         aceStack += 10;
@@ -88,7 +87,6 @@ class App extends Component {
     if (player === 'player') {
       // Draw player card
       let draw = await axios.get(`https://deckofcardsapi.com/api/deck/${this.state.deckId}/draw/?count=1`);
-      console.log('draw', draw)
       if (draw.status === 500) {
         this.drawCard('player')
       } else {
@@ -219,7 +217,8 @@ class App extends Component {
       highScore: highScore,
       viewHighScores: false,
       dealerShouldDraw: true,
-      dealerScoreShown: '???'
+      dealerScoreShown: '???',
+      totalPot: 0
     })
     this.getInitialDraw();
   }
@@ -319,11 +318,12 @@ class App extends Component {
             <SetHighScore
               showHighScores={this.showHighScores}
               score={this.state.highScore}
+              ip={ip}
             />
           )
         } else if (this.state.viewHighScores) {
           return (
-            <HighScore playAgain={this.playAgain} />
+            <HighScore playAgain={this.playAgain} ip={ip}/>
           )
         } else {
           return (
