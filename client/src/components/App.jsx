@@ -88,22 +88,27 @@ class App extends Component {
     if (player === 'player') {
       // Draw player card
       let draw = await axios.get(`https://deckofcardsapi.com/api/deck/${this.state.deckId}/draw/?count=1`);
-      let card = draw.data.cards[0];
-      let hand = this.state.playerDraw;
-      hand.push(card);
-      this.setState({
-        playerDraw: hand
-      })
-      this.updateScore(this.state.playerDraw, 'player');
+      console.log('draw', draw)
+      if (draw.status === 500) {
+        this.drawCard('player')
+      } else {
+        let card = draw.data.cards[0];
+        let hand = this.state.playerDraw;
+        hand.push(card);
+        this.setState({
+          playerDraw: hand
+        })
+        this.updateScore(this.state.playerDraw, 'player');
 
-      setTimeout(() => {
-        // Check if player score has reached or exceeded maximum
-        if (this.state.playerScore > 21) {
-          this.triggerDealerWin();
-        } else if (this.state.playerScore === 21) {
-          this.triggerResults();
-        }
-      }, 1000)
+        setTimeout(() => {
+          // Check if player score has reached or exceeded maximum
+          if (this.state.playerScore > 21) {
+            this.triggerDealerWin();
+          } else if (this.state.playerScore === 21) {
+            this.triggerResults();
+          }
+        }, 1000)
+      }
 
     } else if (player === 'dealer') {
       // Show dealer score
@@ -118,24 +123,28 @@ class App extends Component {
       // Draw dealer card if applicable
       if (this.state.dealerScore < 17) {
         let dealerDraw = await axios.get(`https://deckofcardsapi.com/api/deck/${this.state.deckId}/draw/?count=1`);
-        setTimeout(() => {
-          let dealerCard = dealerDraw.data.cards[0];
-          let dealerHand = this.state.dealerDraw;
-          dealerHand.push(dealerCard);
-          this.setState({
-            dealerDraw: dealerHand
-          })
-          this.updateScore(this.state.dealerDraw, 'dealer');
-
+        if (dealerDraw.status === 500) {
+          this.drawCard('dealer');
+        } else {
           setTimeout(() => {
-            if (this.state.dealerScore < 17) {
-              this.drawCard('dealer');
-            } else {
-              this.setState({dealerShouldDraw: false});
-              this.triggerResults();
-            }
+            let dealerCard = dealerDraw.data.cards[0];
+            let dealerHand = this.state.dealerDraw;
+            dealerHand.push(dealerCard);
+            this.setState({
+              dealerDraw: dealerHand
+            })
+            this.updateScore(this.state.dealerDraw, 'dealer');
+
+            setTimeout(() => {
+              if (this.state.dealerScore < 17) {
+                this.drawCard('dealer');
+              } else {
+                this.setState({dealerShouldDraw: false});
+                this.triggerResults();
+              }
+            }, 1000);
           }, 1000);
-        }, 1000);
+        }
       } else {
         this.setState({dealerShouldDraw: false})
         setTimeout(this.triggerResults, 1000);
