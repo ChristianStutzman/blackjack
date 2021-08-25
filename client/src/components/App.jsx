@@ -166,33 +166,34 @@ class App extends Component {
 
   async triggerResults() {
     if (this.state.dealerShouldDraw) {
-      await this.drawCard('dealer');
-    }
-    if (this.state.playerScore > this.state.dealerScore || this.state.dealerScore > 21) {
-      let newChipTotal;
-      if (this.state.playerScore === 21) {
-        let newPot = this.state.totalPot * 1.5;
-        newChipTotal = newPot + this.state.playerChips;
-      } else {
-        newChipTotal = this.state.totalPot + this.state.playerChips;
-      }
-      setTimeout(() => {
-        this.setState({
-          playerChips: newChipTotal,
-          winner: true
-        })
-      }, 750);
-    } else if (this.state.playerScore === this.state.dealerScore) {
-      let newPot = this.state.totalPot / 2
-      let newChipTotal = newPot + this.state.playerChips;
-      setTimeout(() => {
-        this.setState({
-          playerChips: newChipTotal,
-          draw: true
-        })
-      }, 750);
+      this.drawCard('dealer');
     } else {
-      this.triggerDealerWin();
+      if (this.state.playerScore > this.state.dealerScore || this.state.dealerScore > 21) {
+        let newChipTotal;
+        if (this.state.playerScore === 21) {
+          let newPot = this.state.totalPot * 1.5;
+          newChipTotal = newPot + this.state.playerChips;
+        } else {
+          newChipTotal = this.state.totalPot + this.state.playerChips;
+        }
+        setTimeout(() => {
+          this.setState({
+            playerChips: newChipTotal,
+            winner: true
+          })
+        }, 750);
+      } else if (this.state.playerScore === this.state.dealerScore) {
+        let newPot = this.state.totalPot / 2
+        let newChipTotal = newPot + this.state.playerChips;
+        setTimeout(() => {
+          this.setState({
+            playerChips: newChipTotal,
+            draw: true
+          })
+        }, 750);
+      } else {
+        this.triggerDealerWin();
+      }
     }
   }
 
@@ -217,7 +218,7 @@ class App extends Component {
       event.preventDefault();
     }
     let highScore;
-    if (this.state.gameOver) {
+    if (this.state.gameOver || this.state.setHighScore || this.state.viewHighScores) {
       highScore = 500;
     } else {
       highScore = this.state.playerChips > this.state.highScore ? this.state.playerChips : this.state.highScore;
@@ -264,20 +265,24 @@ class App extends Component {
   }
 
   async getInitialDraw() {
-    const deck = await axios.get('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1')
-    const initialDeckDraw = await axios.get(`https://deckofcardsapi.com/api/deck/${deck.data.deck_id}/draw/?count=4`);
-    let playerDraw = initialDeckDraw.data.cards.slice(0, 2);
-    let dealerDraw = initialDeckDraw.data.cards.slice(2);
-    let dealerCardImage = dealerDraw[0].image;
-    dealerDraw[0].image = 'https://media.istockphoto.com/photos/bicycle-rider-back-playing-card-design-picture-id157772536?k=6&m=157772536&s=170667a&w=0&h=kk9dkMmkrTrkC2kCrXeGIh9PbcoKyJTikLILsakcsbE=';
-    this.setState({
-      deckId: deck.data.deck_id,
-      playerDraw: playerDraw,
-      dealerDraw: dealerDraw,
-      initialDealerCardImage: dealerCardImage
-    })
-    this.updateScore(playerDraw, 'player');
-    this.updateScore(dealerDraw, 'dealer');
+    try {
+      const deck = await axios.get('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1')
+      const initialDeckDraw = await axios.get(`https://deckofcardsapi.com/api/deck/${deck.data.deck_id}/draw/?count=4`);
+      let playerDraw = initialDeckDraw.data.cards.slice(0, 2);
+      let dealerDraw = initialDeckDraw.data.cards.slice(2);
+      let dealerCardImage = dealerDraw[0].image;
+      dealerDraw[0].image = 'https://media.istockphoto.com/photos/bicycle-rider-back-playing-card-design-picture-id157772536?k=6&m=157772536&s=170667a&w=0&h=kk9dkMmkrTrkC2kCrXeGIh9PbcoKyJTikLILsakcsbE=';
+      this.setState({
+        deckId: deck.data.deck_id,
+        playerDraw: playerDraw,
+        dealerDraw: dealerDraw,
+        initialDealerCardImage: dealerCardImage
+      })
+      this.updateScore(playerDraw, 'player');
+      this.updateScore(dealerDraw, 'dealer');
+    } catch {
+      this.getInitialDraw();
+    }
   }
 
 
