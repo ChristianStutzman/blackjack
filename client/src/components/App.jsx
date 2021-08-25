@@ -204,6 +204,12 @@ class App extends Component {
       ante: false,
       playerChips: chipTotal
     })
+
+    setTimeout(() => {
+      if (this.state.playerScore === 21) {
+        this.triggerResults();
+      }
+    }, 1000);
   }
 
   playAgain(event) {
@@ -267,9 +273,6 @@ class App extends Component {
     })
     this.updateScore(playerDraw, 'player');
     this.updateScore(dealerDraw, 'dealer');
-    if (this.state.playerScore === 21) {
-      this.triggerResults();
-    }
   }
 
 
