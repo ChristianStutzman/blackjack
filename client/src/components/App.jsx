@@ -170,22 +170,23 @@ class App extends Component {
     if (this.state.playerScore > this.state.dealerScore || this.state.dealerScore > 21) {
       let newChipTotal;
       if (this.state.playerScore === 21) {
-        newChipTotal = (this.state.totalPot * 1.5) + this.state.playerChips;
+        let newPot = this.state.totalPot * 1.5;
+        newChipTotal = newPot + this.state.playerChips;
       } else {
         newChipTotal = this.state.totalPot + this.state.playerChips;
       }
       setTimeout(() => {
         this.setState({
-          winner: true,
-          playerChips: newChipTotal
+          playerChips: newChipTotal,
+          winner: true
         })
       }, 750);
     } else if (this.state.playerScore === this.state.dealerScore) {
       let newChipTotal = (this.state.totalPot / 2) + this.state.playerChips;
       setTimeout(() => {
         this.setState({
-          draw: true,
-          playerChips: newChipTotal
+          playerChips: newChipTotal,
+          draw: true
         })
       }, 750);
     } else {
