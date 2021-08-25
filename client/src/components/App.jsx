@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import axios from 'axios';
+
+
 import Dealer from './Dealer.jsx';
 import Player from './Player.jsx';
-
+import Winner from './Winner.jsx';
+import Loser from './Loser.jsx';
+import Ante from './Ante.jsx';
 
 
 
@@ -16,13 +20,19 @@ class App extends Component {
       dealerDraw: null,
       dealerScore: 0,
       playerScore: 0,
-      initialDealerCardImage: null
+      initialDealerCardImage: null,
+      winner: false,
+      loser: false,
+      ante: true,
+      playerChips: 500,
+      totalPot: 0
     }
 
     this.updateScore = this.updateScore.bind(this);
     this.drawCard = this.drawCard.bind(this);
     this.triggerGameOver = this.triggerGameOver.bind(this);
     this.triggerResults = this.triggerResults.bind(this);
+    this.submitBet = this.submitBet.bind(this);
   }
 
   updateScore = (cards, player) => {
@@ -121,15 +131,33 @@ class App extends Component {
   }
 
   triggerGameOver() {
-    alert('YOU LOST! GAME OVER');
+    // alert('YOU LOST! GAME OVER');
+    setTimeout(() => {
+      this.setState({
+        loser: true
+      })
+    }, 750);
   }
 
   triggerResults() {
     if (this.state.playerScore > this.state.dealerScore || this.state.dealerScore > 21) {
-      alert('YOU WON!')
+      // alert('YOU WON!')
+      setTimeout(() => {
+        this.setState({
+          winner: true
+        })
+      }, 750);
     } else {
       this.triggerGameOver();
     }
+  }
+
+  submitBet(bet) {
+    let pot = bet * 2;
+    this.setState({
+      totalPot: pot,
+      ante: false
+    })
   }
 
 
@@ -151,34 +179,52 @@ class App extends Component {
   }
 
   render() {
-    if (this.state.playerScore && this.state.dealerScore) {
-      return (
-        <Container>
-          <Row id="main-header">
-            <h1>BlackJack</h1>
-          </Row>
-          <Row id="main-dealer-row">
-            <Dealer draw={this.state.dealerDraw} drawCard={this.drawCard}/>
-          </Row>
-          <Row className="player-btn-row">
-            <Col align="left">
-              <Button variant='success' onClick={() => this.drawCard('player')}>HIT</Button>
-            </Col>
-            <Col align="right">
-              <Button variant='success' onClick={() => this.drawCard('dealer')}>STAND</Button>
-            </Col>
-          </Row>
-          <Row id="main-player-row">
-            <Player
-              draw={this.state.playerDraw}
-              drawCard={this.drawCard}
-              score={this.state.playerScore}
-            />
-          </Row>
-        </Container>
-      )
+    if (this.state.ante) {
+      return <Ante chips={this.state.playerChips} submitBet={this.submitBet}/>
     } else {
-      return <span>Loading...</span>
+      if (this.state.playerScore && this.state.dealerScore) {
+        if (this.state.winner) {
+          return (
+            <Winner playerScore={this.state.playerScore} dealerScore={this.state.dealerScore} />
+          )
+        } else if (this.state.loser) {
+          return (
+            <Loser playerScore={this.state.playerScore} dealerScore={this.state.dealerScore} />
+          )
+        } else {
+          return (
+            <Container>
+              <Row id="main-header">
+                <h1>BlackJack</h1>
+              </Row>
+              <Row align="right" id="total-pot">
+                <span>Total Pot: <strong>{this.state.totalPot}</strong></span>
+              </Row>
+              <Row id="main-dealer-row">
+                <Dealer draw={this.state.dealerDraw} drawCard={this.drawCard}/>
+              </Row>
+              <Row className="player-btn-row">
+                <Col align="left">
+                  <Button variant='success' onClick={() => this.drawCard('player')}>HIT</Button>
+                </Col>
+                <Col align="right">
+                  <Button variant='success' onClick={() => this.drawCard('dealer')}>STAND</Button>
+                </Col>
+              </Row>
+              <Row id="main-player-row">
+                <Player
+                  draw={this.state.playerDraw}
+                  drawCard={this.drawCard}
+                  score={this.state.playerScore}
+                  chips={this.state.playerChips}
+                />
+              </Row>
+            </Container>
+          )
+        }
+      } else {
+        return <span>Loading...</span>
+      }
     }
   }
 }

@@ -46,6 +46,64 @@ button {
   padding-top: 20px;
 }
 
+.outcome-alert {
+  margin-top: 35vh;
+  height: 50vh;
+}
+
+.outcome-heading {
+  letter-spacing: 4px;
+  font-weight: bold;
+  font-size: 50px;
+}
+
+.outcome-total {
+  font-size: 30px;
+  letter-spacing: 4px;
+}
+
+.play-again {
+  margin-top: 15%;
+}
+
+.chip {
+  height: 100px;
+  width: 140px;
+}
+
+.chip-1 {
+  height: 100px;
+  width: 100px;
+}
+
+#ante-btn-row {
+  margin-top: 20px;
+}
+
+#chip-row {
+  margin-top: 5vh;
+  margin-bottom: 5vh;
+  align-items: flex-end;
+}
+
+.player-chips {
+  color: white;
+  font-size: 30px;
+  font-weight: bold;
+  letter-spacing: 3px;
+  margin-bottom: 10vh;
+}
+
+#betting-pot {
+  height: 40vh;
+  align-items: center;
+  text-align: center;
+  font-size: 70px;
+  color: white;
+  font-weight: bold;
+  letter-spacing: 5px;
+}
+
 /* .card-draw-row {
   justify-content: center;
   position: relative;
