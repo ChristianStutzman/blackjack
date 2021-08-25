@@ -86,6 +86,7 @@ class App extends Component {
     if (player === 'player') {
       // Draw player card
       let draw = await axios.get(`https://deckofcardsapi.com/api/deck/${this.state.deckId}/draw/?count=1`);
+      console.log('draw', draw);
       if (draw.status === 500) {
         this.drawCard('player')
       } else {
