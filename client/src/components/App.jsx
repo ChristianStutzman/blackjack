@@ -169,7 +169,12 @@ class App extends Component {
       this.drawCard('dealer');
     }
     if (this.state.playerScore > this.state.dealerScore || this.state.dealerScore > 21) {
-      let newChipTotal = this.state.totalPot + this.state.playerChips;
+      let newChipTotal;
+      if (this.state.playerScore === 21) {
+        newChipTotal = (this.state.totalPot * 1.5) + this.state.playerChips;
+      } else {
+        newChipTotal = this.state.totalPot + this.state.playerChips;
+      }
       setTimeout(() => {
         this.setState({
           winner: true,
