@@ -171,7 +171,8 @@ class App extends Component {
     if (this.state.playerScore > this.state.dealerScore || this.state.dealerScore > 21) {
       let newChipTotal;
       if (this.state.playerScore === 21) {
-        newChipTotal = (this.state.totalPot * 1.5) + this.state.playerChips;
+        let newPot = this.state.totalPot * 1.5;
+        newChipTotal = newPot + this.state.playerChips;
       } else {
         newChipTotal = this.state.totalPot + this.state.playerChips;
       }
