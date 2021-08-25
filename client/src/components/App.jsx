@@ -177,16 +177,16 @@ class App extends Component {
       }
       setTimeout(() => {
         this.setState({
-          winner: true,
-          playerChips: newChipTotal
+          playerChips: newChipTotal,
+          winner: true
         })
       }, 750);
     } else if (this.state.playerScore === this.state.dealerScore) {
       let newChipTotal = (this.state.totalPot / 2) + this.state.playerChips;
       setTimeout(() => {
         this.setState({
-          draw: true,
-          playerChips: newChipTotal
+          playerChips: newChipTotal,
+          draw: true
         })
       }, 750);
     } else {
