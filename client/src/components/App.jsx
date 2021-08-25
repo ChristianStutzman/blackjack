@@ -164,9 +164,9 @@ class App extends Component {
     }
   }
 
-  triggerResults() {
+  async triggerResults() {
     if (this.state.dealerShouldDraw) {
-      this.drawCard('dealer');
+      await this.drawCard('dealer');
     }
     if (this.state.playerScore > this.state.dealerScore || this.state.dealerScore > 21) {
       let newChipTotal;
