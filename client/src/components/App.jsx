@@ -8,6 +8,8 @@ import Player from './Player.jsx';
 import Winner from './Winner.jsx';
 import Loser from './Loser.jsx';
 import Ante from './Ante.jsx';
+import Draw from './Draw.jsx';
+import GameOver from './GameOver.jsx';
 
 
 
@@ -26,7 +28,9 @@ class App extends Component {
       draw: false,
       ante: true,
       playerChips: 500,
-      totalPot: 0
+      totalPot: 0,
+      gameOver: false,
+      highScore: 500
     }
 
     this.updateScore = this.updateScore.bind(this);
@@ -119,19 +123,25 @@ class App extends Component {
           } else {
             this.triggerResults();
           }
-        }, 500);
+        }, 1000);
       } else {
-        setTimeout(this.triggerResults, 500);
+        setTimeout(this.triggerResults, 1000);
       }
     }
   }
 
   triggerDealerWin() {
-    setTimeout(() => {
-      this.setState({
-        loser: true
-      })
-    }, 750);
+    if (this.state.playerChips < 5) {
+      setTimeout(() => {
+        this.handleGameOver();
+      }, 750)
+    } else if (!this.state.gameOver) {
+      setTimeout(() => {
+        this.setState({
+          loser: true
+        })
+      }, 750);
+    }
   }
 
   triggerResults() {
@@ -167,18 +177,30 @@ class App extends Component {
   }
 
   playAgain(event) {
-    event.preventDefault();
+    if (event) {
+      event.preventDefault();
+    }
+    let highScore = this.state.playerChips > this.state.highScore ? this.state.playerChips : this.state.highScore;
     this.setState({
       ante: true,
       winner: false,
       loser: false,
       draw: false,
+      gameOver: false,
       deckId: null,
       playerDraw: null,
       dealerDraw: null,
-      initialDealerCardImage: null
+      initialDealerCardImage: null,
+      highScore: highScore
     })
     this.getInitialDraw();
+  }
+
+  handleGameOver() {
+    this.setState({
+      playerChips: 500,
+      gameOver: true
+    });
   }
 
   async getInitialDraw() {
@@ -233,6 +255,16 @@ class App extends Component {
               dealerScore={this.state.dealerScore}
               chips={this.state.playerChips}
               playAgain={this.playAgain}
+            />
+          )
+        } else if (this.state.gameOver) {
+          return (
+            <GameOver
+              playerScore={this.state.playerScore}
+              dealerScore={this.state.dealerScore}
+              chips={this.state.playerChips}
+              playAgain={this.playAgain}
+              highScore={this.state.highScore}
             />
           )
         } else {
