@@ -216,7 +216,12 @@ class App extends Component {
     if (event) {
       event.preventDefault();
     }
-    let highScore = this.state.playerChips > this.state.highScore ? this.state.playerChips : this.state.highScore;
+    let highScore;
+    if (this.state.gameOver) {
+      highScore = 500;
+    } else {
+      highScore = this.state.playerChips > this.state.highScore ? this.state.playerChips : this.state.highScore;
+    }
     this.setState({
       ante: true,
       winner: false,
