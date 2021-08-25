@@ -11,7 +11,6 @@ class SetHighScore extends Component {
       score: props.score,
       date: moment().format('MMMM Do YYYY, h:mm:ss a')
     }
-    console.log(props)
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
