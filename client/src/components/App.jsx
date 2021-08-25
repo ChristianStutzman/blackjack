@@ -34,7 +34,9 @@ class App extends Component {
       gameOver: false,
       highScore: 500,
       viewHighScores: false,
-      setHighScore: false
+      setHighScore: false,
+      dealerShouldDraw: true,
+      dealerScoreShown: '???'
     }
 
     this.updateScore = this.updateScore.bind(this);
@@ -70,8 +72,10 @@ class App extends Component {
         score += cardValue;
       }
     })
+    console.log('aceStack', aceStack);
+    console.log('score', this.state[`${player}Score`])
     if (aceStack > 0) {
-      if (aceStack + this.state[`${player}Score`] <= 11) {
+      if (aceStack + score <= 11) {
         aceStack += 10;
       }
     }
@@ -102,6 +106,8 @@ class App extends Component {
       }, 1000)
 
     } else if (player === 'dealer') {
+      // Show dealer score
+      this.setState({dealerScoreShown: null});
       // Show initial dealer draw
       let currentDealerHand = this.state.dealerDraw;
       currentDealerHand[0].image = this.state.initialDealerCardImage;
@@ -112,22 +118,26 @@ class App extends Component {
       // Draw dealer card if applicable
       if (this.state.dealerScore < 17) {
         let dealerDraw = await axios.get(`https://deckofcardsapi.com/api/deck/${this.state.deckId}/draw/?count=1`);
-        let dealerCard = dealerDraw.data.cards[0];
-        let dealerHand = this.state.dealerDraw;
-        dealerHand.push(dealerCard);
-        this.setState({
-          dealerDraw: dealerHand
-        })
-        this.updateScore(this.state.dealerDraw, 'dealer');
-
         setTimeout(() => {
-          if (this.state.dealerScore < 17) {
-            this.drawCard('dealer');
-          } else {
-            this.triggerResults();
-          }
+          let dealerCard = dealerDraw.data.cards[0];
+          let dealerHand = this.state.dealerDraw;
+          dealerHand.push(dealerCard);
+          this.setState({
+            dealerDraw: dealerHand
+          })
+          this.updateScore(this.state.dealerDraw, 'dealer');
+
+          setTimeout(() => {
+            if (this.state.dealerScore < 17) {
+              this.drawCard('dealer');
+            } else {
+              this.setState({dealerShouldDraw: false});
+              this.triggerResults();
+            }
+          }, 1000);
         }, 1000);
       } else {
+        this.setState({dealerShouldDraw: false})
         setTimeout(this.triggerResults, 1000);
       }
     }
@@ -148,6 +158,9 @@ class App extends Component {
   }
 
   triggerResults() {
+    if (this.state.dealerShouldDraw) {
+      this.drawCard('dealer');
+    }
     if (this.state.playerScore > this.state.dealerScore || this.state.dealerScore > 21) {
       let newChipTotal = this.state.totalPot + this.state.playerChips;
       setTimeout(() => {
@@ -194,7 +207,10 @@ class App extends Component {
       playerDraw: null,
       dealerDraw: null,
       initialDealerCardImage: null,
-      highScore: highScore
+      highScore: highScore,
+      viewHighScores: false,
+      dealerShouldDraw: true,
+      dealerScoreShown: '???'
     })
     this.getInitialDraw();
   }
@@ -236,6 +252,9 @@ class App extends Component {
     })
     this.updateScore(playerDraw, 'player');
     this.updateScore(dealerDraw, 'dealer');
+    if (this.state.playerScore === 21) {
+      this.triggerResults();
+    }
   }
 
 
@@ -303,8 +322,13 @@ class App extends Component {
               <Row id="main-header">
                 <h1>BlackJack</h1>
               </Row>
-              <Row align="right" id="total-pot">
-                <span>Total Pot: <strong>{this.state.totalPot}</strong></span>
+              <Row id="total-pot">
+                <Col md={4}>
+                  <span>Dealer Score: {this.state.dealerScoreShown || this.state.dealerScore}</span>
+                </Col>
+                <Col md={{span: 4, offset: 4}}>
+                  <span>Total Pot: <strong>{this.state.totalPot}</strong></span>
+                </Col>
               </Row>
               <Row id="main-dealer-row">
                 <Dealer draw={this.state.dealerDraw} drawCard={this.drawCard}/>

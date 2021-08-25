@@ -8,7 +8,6 @@ class Dealer extends Component {
   }
 
   render() {
-    console.log(this.props)
     if (this.props.draw) {
       return (
         <Row align="center" className="card-draw-row">

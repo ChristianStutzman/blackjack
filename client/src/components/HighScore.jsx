@@ -38,6 +38,10 @@ class HighScore extends Component {
                 </Col>
               </Row>
             ))}
+            <hr/>
+            <Row align="center" id="high-score-btn">
+              <Button onClick={this.props.playAgain}>Play Again</Button>
+            </Row>
           </Alert>
         </Row>
       )

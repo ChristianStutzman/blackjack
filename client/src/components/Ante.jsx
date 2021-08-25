@@ -60,6 +60,9 @@ class Ante extends Component {
           <Col>
             <Image className="chip" value="100" onClick={this.handleClick} src="https://purepng.com/public/uploads/large/purepng.com-poker-chipspokercard-gamescombines-gamblingstrategyskillsportgamepoker-chips-1701528180743xy4rw.png" />
           </Col>
+          <Col>
+            <Image className="chip-1" value="500" onClick={this.handleClick} src="https://www.freeiconspng.com/uploads/poker-chip-worth-500-icon-2.png" />
+          </Col>
         </Row>
         <Row align="left">
           <span className="player-chips">Chips Available: {this.props.chips}</span>

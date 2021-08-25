@@ -32,17 +32,23 @@ class SetHighScore extends Component {
 
   render() {
     return (
-      <Alert variant="info">
-        <Alert.Heading id="high-score-submit-heading">Submit Your High Score</Alert.Heading>
-        <hr/>
-        <span>Highest Chip Total: {this.props.score}</span>
-        <br/>
-        <Form>
-          <Form.Label>Enter Your Name:</Form.Label>
-          <Form.Control onChange={this.handleChange}/>
-          <Button onClick={this.handleSubmit}>Submit</Button>
-        </Form>
-      </Alert>
+      <Row id="main-hs-row">
+        <Alert variant="info" id="submit-score-alert">
+          <Alert.Heading id="high-score-submit-heading">Submit Your High Score</Alert.Heading>
+          <hr/>
+          <span id="chip-total-hs">Highest Chip Total: {this.props.score}</span>
+          <br/>
+          <Form>
+            <Row align="center">
+              <Form.Label id="hs-name-label">Enter Your Name:</Form.Label>
+            </Row>
+            <Row align="center" id="hs-name-row">
+              <Form.Control id="hs-name" onChange={this.handleChange} placeholder="Name"/>
+            </Row>
+            <Button onClick={this.handleSubmit}>Submit</Button>
+          </Form>
+        </Alert>
+      </Row>
     )
   }
 }

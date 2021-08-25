@@ -77,6 +77,17 @@ button {
   width: 100px;
 }
 
+
+.chip-1:hover {
+  cursor: pointer;
+  transform: scale(1.15);
+}
+
+.chip:hover {
+  cursor: pointer;
+  transform: scale(1.15);
+}
+
 #ante-btn-row {
   margin-top: 20px;
 }
@@ -121,7 +132,46 @@ button {
 }
 
 .high-score-info {
-  font-size: 25px;
+  font-size: 20px;
+}
+
+#high-score-btn {
+  width: 30%;
+  margin-top: 2.5rem;
+}
+
+#submit-score-alert {
+  margin-top: 30vh;
+  height: 40vh;
+  width: 60vw;
+  text-align: center;
+}
+
+#main-hs-row {
+  justify-content: center;
+  align-items: center;
+}
+
+#high-score-submit-heading {
+  font-size: 40px;
+}
+
+#chip-total-hs {
+  font-size: 30px;
+}
+
+#hs-name {
+  width: 50%;
+  margin: 5px 0 15px 0;
+}
+
+#hs-name-row {
+  justify-content: center;
+}
+
+#hs-name-label {
+  margin: 10px;
+  font-size: 20px;
 }
 
 /* .card-draw-row {
