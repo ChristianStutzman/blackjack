@@ -11,7 +11,7 @@ class HighScore extends Component {
   }
 
   async componentDidMount() {
-    const scores = await axios.get('http://localhost:3000/highScores');
+    const scores = await axios.get('http://3.19.75.226:3000/highScores');
     console.log(scores);
     this.setState({
       scores: scores.data
