@@ -23,6 +23,7 @@ class App extends Component {
       initialDealerCardImage: null,
       winner: false,
       loser: false,
+      draw: false,
       ante: true,
       playerChips: 500,
       totalPot: 0
@@ -30,9 +31,12 @@ class App extends Component {
 
     this.updateScore = this.updateScore.bind(this);
     this.drawCard = this.drawCard.bind(this);
-    this.triggerGameOver = this.triggerGameOver.bind(this);
+    this.triggerDealerWin = this.triggerDealerWin.bind(this);
     this.triggerResults = this.triggerResults.bind(this);
     this.submitBet = this.submitBet.bind(this);
+    this.playAgain = this.playAgain.bind(this);
+    this.getInitialDraw = this.getInitialDraw.bind(this);
+    this.handleGameOver = this.handleGameOver.bind(this);
   }
 
   updateScore = (cards, player) => {
@@ -51,19 +55,11 @@ class App extends Component {
         cardValue = 10;
       } else {
         aceStack++
-        // if ((this.state[`${player}Score`] + 11) > 21) {
-        //   cardValue = 1;
-        // } else {
-        //   cardValue = 11;
-        // }
       }
-      // let tempState = this.state;
       console.log(cardValue)
       if (cardValue) {
         score += cardValue;
-        // tempState[`${player}Score`] = tempState[`${player}Score`] + cardValue;
       }
-      // this.setState(tempState);
     })
     console.log('acestack', aceStack)
     if (aceStack > 0) {
@@ -92,7 +88,7 @@ class App extends Component {
       setTimeout(() => {
         // Check if player score has reached or exceeded maximum
         if (this.state.playerScore > 21) {
-          this.triggerGameOver();
+          this.triggerDealerWin();
         } else if (this.state.playerScore === 21) {
           this.triggerResults();
         }
@@ -130,8 +126,7 @@ class App extends Component {
     }
   }
 
-  triggerGameOver() {
-    // alert('YOU LOST! GAME OVER');
+  triggerDealerWin() {
     setTimeout(() => {
       this.setState({
         loser: true
@@ -141,27 +136,52 @@ class App extends Component {
 
   triggerResults() {
     if (this.state.playerScore > this.state.dealerScore || this.state.dealerScore > 21) {
-      // alert('YOU WON!')
+      let newChipTotal = this.state.totalPot + this.state.playerChips;
       setTimeout(() => {
         this.setState({
-          winner: true
+          winner: true,
+          playerChips: newChipTotal
+        })
+      }, 750);
+    } else if (this.state.playerScore === this.state.dealerScore) {
+      let newChipTotal = (this.state.totalPot / 2) + this.state.playerChips;
+      setTimeout(() => {
+        this.setState({
+          draw: true,
+          playerChips: newChipTotal
         })
       }, 750);
     } else {
-      this.triggerGameOver();
+      this.triggerDealerWin();
     }
   }
 
   submitBet(bet) {
     let pot = bet * 2;
+    let chipTotal = this.state.playerChips - bet;
     this.setState({
       totalPot: pot,
-      ante: false
+      ante: false,
+      playerChips: chipTotal
     })
   }
 
+  playAgain(event) {
+    event.preventDefault();
+    this.setState({
+      ante: true,
+      winner: false,
+      loser: false,
+      draw: false,
+      deckId: null,
+      playerDraw: null,
+      dealerDraw: null,
+      initialDealerCardImage: null
+    })
+    this.getInitialDraw();
+  }
 
-  async componentDidMount () {
+  async getInitialDraw() {
     const deck = await axios.get('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1')
     const initialDeckDraw = await axios.get(`https://deckofcardsapi.com/api/deck/${deck.data.deck_id}/draw/?count=4`);
     let playerDraw = initialDeckDraw.data.cards.slice(0, 2);
@@ -178,6 +198,11 @@ class App extends Component {
     this.updateScore(dealerDraw, 'dealer');
   }
 
+
+  async componentDidMount () {
+    this.getInitialDraw()
+  }
+
   render() {
     if (this.state.ante) {
       return <Ante chips={this.state.playerChips} submitBet={this.submitBet}/>
@@ -185,11 +210,30 @@ class App extends Component {
       if (this.state.playerScore && this.state.dealerScore) {
         if (this.state.winner) {
           return (
-            <Winner playerScore={this.state.playerScore} dealerScore={this.state.dealerScore} />
+            <Winner
+              playerScore={this.state.playerScore}
+              dealerScore={this.state.dealerScore}
+              chips={this.state.playerChips}
+              playAgain={this.playAgain}
+            />
           )
         } else if (this.state.loser) {
           return (
-            <Loser playerScore={this.state.playerScore} dealerScore={this.state.dealerScore} />
+            <Loser
+              playerScore={this.state.playerScore}
+              dealerScore={this.state.dealerScore}
+              chips={this.state.playerChips}
+              playAgain={this.playAgain}
+            />
+          )
+        } else if (this.state.draw) {
+          return (
+            <Draw
+              playerScore={this.state.playerScore}
+              dealerScore={this.state.dealerScore}
+              chips={this.state.playerChips}
+              playAgain={this.playAgain}
+            />
           )
         } else {
           return (

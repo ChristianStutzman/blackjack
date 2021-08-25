@@ -15,8 +15,13 @@ class Ante extends Component {
   handleClick(event) {
     event.preventDefault();
     let pot = this.state.pot;
-    pot += Number(event.target.getAttribute('value'));
-    this.setState({pot: pot});
+    let increment = Number(event.target.getAttribute('value'));
+    if (pot + increment > this.props.chips) {
+      this.setState({pot: this.props.chips});
+    } else {
+      pot += increment;
+      this.setState({pot: pot});
+    }
   }
 
   handleReset(event) {

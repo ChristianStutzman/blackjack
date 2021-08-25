@@ -20,16 +20,13 @@ class Player extends Component {
               )
             })}
           </Row>
-          {/* <Row className="player-btn-row">
-            <Col>
-              <Button variant='success' onClick={() => this.props.drawCard('player')}>HIT</Button>
+          <Row>
+            <Col md={4}>
+              <span id="chip-total">Chips: {this.props.chips}</span>
             </Col>
-            <Col>
-              <Button variant='success' onClick={() => this.props.drawCard('dealer')}>STAND</Button>
+            <Col md={{span: 4, offset: 4}}>
+              <span id="player-score">Your score: {this.props.score}</span>
             </Col>
-          </Row> */}
-          <Row align="right">
-            <span id="player-score">Your score: {this.props.score}</span>
           </Row>
         </React.Fragment>
       )

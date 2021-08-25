@@ -38,12 +38,13 @@ button {
   height: 3rem;
 }
 
-#player-score {
+#player-score,
+#chip-total {
   color: white;
   font-size: 30px;
   font-weight: bold;
   letter-spacing: 3px;
-  padding-top: 20px;
+  padding-top: 10px;
 }
 
 .outcome-alert {
@@ -63,7 +64,7 @@ button {
 }
 
 .play-again {
-  margin-top: 15%;
+  margin-top: 5%;
 }
 
 .chip {
@@ -102,6 +103,13 @@ button {
   color: white;
   font-weight: bold;
   letter-spacing: 5px;
+}
+
+#total-pot {
+  color: white;
+  font-size: 30px;
+  font-weight: bold;
+  letter-spacing: 3px;
 }
 
 /* .card-draw-row {

@@ -1,12 +1,12 @@
 import React from 'react';
 import { Alert, Row, Col, Button } from 'react-bootstrap';
 
-const Loser = (props) => {
+const Draw = (props) => {
   return (
     <Row align="center">
       <Col md={{span: 8, offset: 2}}>
-        <Alert className="outcome-alert" variant="danger">
-          <Alert.Heading className="outcome-heading">Dealer Wins!</Alert.Heading>
+        <Alert className="outcome-alert" variant="warning">
+          <Alert.Heading className="outcome-heading">Draw!</Alert.Heading>
           <hr/>
           <span className="outcome-total">Player Total: {props.playerScore}</span>
           <br/>
@@ -14,7 +14,7 @@ const Loser = (props) => {
           <br/>
           <span className="outcome-total">Total Chips Left: {props.chips}</span>
           <div className="play-again">
-            <Button onClick={props.playAgain} variant="outline-danger">
+            <Button onClick={props.playAgain} variant="outline-warning">
               Play Again
             </Button>
           </div>
@@ -24,4 +24,4 @@ const Loser = (props) => {
   )
 }
 
-export default Loser;
+export default Draw;

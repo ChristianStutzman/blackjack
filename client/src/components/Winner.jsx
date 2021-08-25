@@ -11,8 +11,10 @@ const Winner = (props) => {
           <span className="outcome-total">Player Total: {props.playerScore}</span>
           <br/>
           <span className="outcome-total">Dealer Total: {props.dealerScore}</span>
+          <br/>
+          <span className="outcome-total">Total Chips Left: {props.chips}</span>
           <div className="play-again">
-            <Button variant="outline-success">
+            <Button onClick={props.playAgain} variant="outline-success">
               Play Again
             </Button>
           </div>
