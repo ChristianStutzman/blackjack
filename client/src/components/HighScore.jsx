@@ -11,7 +11,7 @@ class HighScore extends Component {
   }
 
   async componentDidMount() {
-    const scores = await axios.get('http://localhost:3000/highScores');
+    const scores = await axios.get(`http://${this.props.ip}:3000/highScores`);
     this.setState({
       scores: scores.data
     })

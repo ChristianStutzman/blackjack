@@ -13,6 +13,7 @@ import GameOver from './GameOver.jsx';
 import HighScore from './HighScore.jsx';
 import SetHighScore from './SetHighScore.jsx';
 
+const ip = '3.19.75.226';
 
 
 class App extends Component {
@@ -345,11 +346,12 @@ class App extends Component {
             <SetHighScore
               showHighScores={this.showHighScores}
               score={this.state.highScore}
+              ip={ip}
             />
           )
         } else if (this.state.viewHighScores) {
           return (
-            <HighScore playAgain={this.playAgain} />
+            <HighScore playAgain={this.playAgain} ip={ip}/>
           )
         } else {
           return (

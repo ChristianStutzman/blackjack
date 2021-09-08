@@ -3,9 +3,9 @@ var DIST_DIR = path.join(__dirname, '/client/dist');
 var SRC_DIR = path.join(__dirname, '/client/src');
 
 module.exports = {
-  mode: 'development',
+  mode: 'production',
   devtool: process.env.NODE_ENV === 'development' ? "inline-source-map" : "source-map",
-  entry: `${SRC_DIR}/index.jsx`,
+  entry: `${SRC_DIR}/Index.jsx`,
   output: {
     filename: 'bundle.js',
     path: DIST_DIR,
